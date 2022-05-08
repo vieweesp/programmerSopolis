@@ -7,13 +7,50 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 require("./src/theme");
 
-export default function App() {
+export default function App( props ) {
+  let [fontsLoaded] = useFonts({
+    Lato_100Thin, Lato_400Regular, Lato_700Bold
+  });
+
+  const [isReady, setIsReady] = React.useState(false);
+
+
+  if( !isReady || !fontsLoaded){
+    return (
+      <AppLoading 
+        startAsync={_cacheResourcesAsync}
+        onFinish = { ()=> setIsReady(true) }
+        onError={console.warn}
+      />
+    )
+  }
+
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>kcio hello</Text>
+      <Text style={styles.text}>{props.appName}</Text>
+      <Text style={styles.text}>{props.appName2}</Text>
     </View>
   );
 }
+
+App.defaultProps = {
+  appName: Constants.manifest.name,
+  appName2: "Kcio hola..",
+}
+
+//Cargar todos los assets necesarios al principio , documentacion de Expo
+const _cacheResourcesAsync = () => {
+  const images = [
+    require('./assets/app_icon.png'),
+  ];
+
+const cacheImages = images.map(image => {
+  return Asset.fromModule(image).downloadAsync();
+});
+
+  return Promise.all(cacheImages);
+}
+
 
 const styles = EStyleSheet.create({
   container:{
