@@ -5,6 +5,7 @@ import AppLoading from 'expo-app-loading';
 import { Asset } from "expo-asset";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
+import { ActivityLoader } from './src/components/Shared';
 require("./src/theme");
 
 export default function App( props ) {
@@ -27,8 +28,7 @@ export default function App( props ) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{props.appName}</Text>
-      <Text style={styles.text}>{props.appName2}</Text>
+      <ActivityLoader/>
     </View>
   );
 }
