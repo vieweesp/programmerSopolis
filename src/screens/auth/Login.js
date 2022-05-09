@@ -1,5 +1,6 @@
 import React from "react";
-import { SafeAreaView, Text, View } from "react-native-safe-area-context";
+import { View, Text } from 'react-native';
+import { SafeAreaView } from "react-native-safe-area-context";
 import EStyleSheet from "react-native-extended-stylesheet";
 
 const Login = () => {
@@ -11,7 +12,7 @@ const Login = () => {
                 </Text>
             </View>
         </SafeAreaView>
-    )
+  );
 }
 
 export default Login;

@@ -6,6 +6,7 @@ import { Asset } from "expo-asset";
 import EStyleSheet from 'react-native-extended-stylesheet';
 import Constants from 'expo-constants';
 import { ActivityLoader } from './src/components/Shared';
+import AppNavigation from './src/navigations/AppNavigation';
 require("./src/theme");
 
 export default function App( props ) {
@@ -22,15 +23,11 @@ export default function App( props ) {
         startAsync={_cacheResourcesAsync}
         onFinish = { ()=> setIsReady(true) }
         onError={console.warn}
-      />
+      /> 
     )
   }
 
-  return (
-    <View style={styles.container}>
-      <ActivityLoader/>
-    </View>
-  );
+  return <AppNavigation></AppNavigation>;
 }
 
 App.defaultProps = {
