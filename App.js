@@ -27,7 +27,12 @@ export default function App( props ) {
     )
   }
 
-  return <AppNavigation></AppNavigation>;
+  return (
+    <AppNavigation>
+      
+    </AppNavigation>
+    
+  );
 }
 
 App.defaultProps = {
