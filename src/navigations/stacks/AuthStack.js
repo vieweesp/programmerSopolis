@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator();
 const AuthStack = ({ appName }) => {
   return (
     <Stack.Navigator
-      initialRouteName="Login"
+      initialRouteName="Signup"
       screenOptions={{
         headerBackTitle: "",
         headerShown: true,

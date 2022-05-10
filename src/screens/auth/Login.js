@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import EStyleSheet from "react-native-extended-stylesheet";
+
 import { Text, Button, Image } from "react-native-elements";
 
 import { ErrorText, ActivityLoader } from "../../components/Shared";
 
 import { useForm } from "react-hook-form";
 import { EmailInput, PasswordInput } from "../../components/inputs";
+
+import styles from "../../styles/auth";
 
 const Login = ({ navigation }) => {
     const [error, setError] = useState(null);
@@ -16,8 +18,9 @@ const Login = ({ navigation }) => {
 
     const { control, handleSubmit, formState: {errors} } = useForm();
 
-    const login = async (data) => {
+    const _login = async (data) => {
         //TODO iniciar sesion
+        alert("login ok");
     }
     
     const toggleSecureEntry = () => {
@@ -63,11 +66,11 @@ const Login = ({ navigation }) => {
                     buttonStyle={styles.button}
                     title="Acceder"
                     type="outline"
-                    onPress={handleSubmit(login)}
+                    onPress={handleSubmit(_login)}
                 />
 
                 <Text
-                    onPress={ () => navigation.navigate("Singup")}
+                    onPress={ () => navigation.navigate("Signup")}
                     style={styles.link}
                 >
                     No tienes cuenta?
@@ -80,39 +83,3 @@ const Login = ({ navigation }) => {
 
 export default Login;
 
-const styles = EStyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '$authBg',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginBottom: 0,
-    },
-    title: {
-      fontFamily: '$700Bold',
-      color: '$primary',
-      fontWeight: '$fontWeight900',
-    },
-    buttonTitle: {
-      fontFamily: '$400Regular',
-      color: '$primary',
-      fontSize: 22,
-    },
-    button: {
-      borderColor: 'transparent',
-    },
-    input: {
-      fontFamily: '$400Regular',
-      color: '$black',
-    },
-    link: {
-      fontFamily: "$400Regular",
-      fontSize: '$font12',
-      color: '$black',
-      textDecorationLine: "underline",
-    },
-    errorValidation: {
-      color: "$red",
-      fontSize: "$font12"
-    }
-  });
