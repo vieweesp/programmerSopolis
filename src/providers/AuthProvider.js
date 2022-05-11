@@ -29,9 +29,40 @@ const AuthProvider = () => {
 
         }
 
-        bootstrapAsync().then( () => {
+    bootstrapAsync().then(() => {});
+  });
 
-        });
-    });
+    //manegar estado del usuario en frontend
+    const handleLogin = async ({token, user}) => {
+        try{
+      dispatch({ type: SIGN_IN, token, user });
+        }catch(error){
+            throw new Error (error);
+        }
+    }
+
+  const handleLogout = async () => {
+        try{
+      delete axios.defaults.headers.common["Authorization"];
+        }catch(error){
+            throw new Error (error);
+        }finally{
+      dispatch({ type: SIGN_OUT });
+        }
+    }
+
+  const authContext = useMemo(() => {
+        return {
+            state, handleLogin, handleLogout
+        }
+    }, [state]);
+
+    return (
+        <AuthContext.Provider value={authContext}>
+            <AppNavigation userToken={state.userToken} />
+        </AuthContext.Provider>
+    );
+};
     
-}
+    const useAuth = () => useContext(AuthContext);
+    export { useAuth, AuthProvider };
