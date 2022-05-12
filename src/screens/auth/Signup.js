@@ -11,6 +11,9 @@ import { EmailInput, PasswordInput, TextInput } from "../../components/inputs";
 
 import styles from "../../styles/auth";
 
+import { signup } from "../../services/AuthService";
+import Toast from "react-native-root-toast";
+
 const Signup = ( { navigation }) => {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -19,16 +22,28 @@ const Signup = ( { navigation }) => {
 
     const { control, handleSubmit, formState: {errors} } = useForm();
 
-    const _signup = async () => {
+  const _signup = async (data) => {
         //TODO registrar usuarios
         alert("singup ok");
+    try{
+        setLoading(true);
+        const message = await signup(data);
+        await navigation.navigate("Login");
+        Toast.show(
+            message,
+            {}
+        );
+    } catch (e){
+        setError(e.message);
+    } finally {
+        setLoading(false);
     }
-
+  }
     const toggleSecureEntry = () => {
-      setSecureEntry(!secureEntry);
+    	setSecureEntry(!secureEntry)
     }
     const toggleSecureConfirmationEntry = () => {
-      setSecureConfirmationEntry(!secureConfirmationEntry);
+    setSecureConfirmationEntry(!secureConfirmationEntry)
     }
 
     return (
