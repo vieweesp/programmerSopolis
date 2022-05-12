@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { useFonts, Lato_100Thin, Lato_400Regular, Lato_700Bold } from '@expo-google-fonts/lato';
 import AppLoading from 'expo-app-loading';
@@ -8,6 +8,8 @@ import Constants from 'expo-constants';
 import { ActivityLoader } from './src/components/Shared';
 import AppNavigation from './src/navigations/AppNavigation';
 require("./src/theme");
+import { RootSiblingParent } from 'react-native-root-siblings';
+import { AuthProvider } from './src/providers/AuthProvider';
 
 export default function App( props ) {
   let [fontsLoaded] = useFonts({
@@ -28,9 +30,10 @@ export default function App( props ) {
   }
 
   return (
-    <AppNavigation>
-      
-    </AppNavigation>
+    
+    <RootSiblingParent>
+      <AuthProvider />
+    </RootSiblingParent>
     
   );
 }

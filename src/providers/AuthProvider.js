@@ -1,10 +1,10 @@
 import React, { createContext, useReducer, useMemo, useContext, useEffect } from "react";
 import * as axios from "axios";
 import { getItemAsync } from "expo-secure-store";
-import authReducer, { initialState, RESTORE_TOKEN, SIGN_IN, SIGN_OUT} from "../reducers/AuthReducer";
+import authReducer, { initialState, RESTORE_TOKEN, SIGN_IN, SIGN_OUT } from "../reducers/AuthReducer";
 
 import AppNavigation from "../navigations/AppNavigation";
-import { Alert } from "react-native";
+import auth from "../styles/auth";
 
 export const USER_TOKEN_KEY = "userToken";
 export const USER_KEY = "user";
@@ -12,57 +12,66 @@ export const USER_KEY = "user";
 export const AuthContext = createContext();
 
 const AuthProvider = () => {
-    const [state, dispatch] = useReducer(authReducer, initialState);
+  const [state, dispatch] = useReducer(authReducer, initialState);
 
-    useEffect( () => {
-        const bootstrapAsync = async () => {
+  useEffect(() => {
+    const bootstrapAsync = async () => {
+      let userToken;
 
-            let userToken;
+      try {
+        userToken = await getItemAsync(USER_TOKEN_KEY);
+      } catch (e) {
+        //alert("El token no se ha podido restaurar, cierra la APP" + e);
+        console.log("El token no se ha podido restaurar, cierra la APP" + e);
+      }
 
-            try{
-                userToken = await getItemAsync(USER_TOKEN_KEY);
-            }catch(e){
-                alert("El token no se ha podido restaurar, cierra la APP");
-            }
-
-            dispatch({type: RESTORE_TOKEN, token: userToken});
-
-        }
+      dispatch({type: RESTORE_TOKEN, token: userToken});
+    }
 
     bootstrapAsync().then(() => {});
   });
 
     //manegar estado del usuario en frontend
-    const handleLogin = async ({token, user}) => {
-        try{
+  const handleLogin = async ({ token, user }) => {
+    try {
       dispatch({ type: SIGN_IN, token, user });
-        }catch(error){
-            throw new Error (error);
-        }
+    } catch (error) {
+      throw new Error(error);
     }
+  }
 
   const handleLogout = async () => {
-        try{
+    try {
       delete axios.defaults.headers.common["Authorization"];
-        }catch(error){
-            throw new Error (error);
-        }finally{
+    } catch (error) {
+      throw new Error(error);
+    } finally {
       dispatch({ type: SIGN_OUT });
-        }
     }
+  }
 
   const authContext = useMemo(() => {
-        return {
-            state, handleLogin, handleLogout
-        }
-    }, [state]);
+      return {
+        state, handleLogin, handleLogout
+      }
+  }, [state]);
 
-    return (
-        <AuthContext.Provider value={authContext}>
-            <AppNavigation userToken={state.userToken} />
-        </AuthContext.Provider>
-    );
+  return (
+      <AuthContext.Provider value={authContext}>
+        <AppNavigation userToken={state.userToken} />
+      </AuthContext.Provider>
+  );
 };
-    
-    const useAuth = () => useContext(AuthContext);
-    export { useAuth, AuthProvider };
+
+/**
+ * Object {
+ * "handleLogin": [Function handleLogin],
+ *  "handleLogout": [Function handleLogout],
+ *  "state": Object {
+ *    "user": null,
+ *    "userToken": null,
+ *  },
+ * }
+ */
+const useAuth = () => useContext(AuthContext);
+export { useAuth, AuthProvider };
