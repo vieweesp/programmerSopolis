@@ -3,11 +3,15 @@ import { View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Text, Button, Image } from "react-native-elements";
+import Toast from "react-native-root-toast";
 
 import { ErrorText, ActivityLoader } from "../../components/Shared";
 
 import { useForm } from "react-hook-form";
 import { EmailInput, PasswordInput } from "../../components/inputs";
+
+import { useAuth } from "../../providers/AuthProvider";
+import { login } from "../../services/AuthService";
 
 import styles from "../../styles/auth";
 
@@ -17,10 +21,25 @@ const Login = ({ navigation }) => {
     const [secureEntry, setsecureEntry] = useState(true);
 
     const { control, handleSubmit, formState: {errors} } = useForm();
+  const { handleLogin } = useAuth();
 
     const _login = async (data) => {
         //TODO iniciar sesion
         alert("login ok");
+    try {
+      setLoading(true);
+      const response = await login(data);
+      await handleLogin(response.data);
+      Toast.show(
+          response.message,
+        {
+          position: Toast.positions.CENTER,
+        }
+      );
+    } catch (e) {
+      setError(e.message);
+      setLoading(false);
+    }
     }
     
     const toggleSecureEntry = () => {
